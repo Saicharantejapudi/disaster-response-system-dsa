@@ -86,3 +86,117 @@ The graph contains approximately **36 strategically selected locations** that ar
 4. **Road Blockages Toggles**: Directly click on map roads or toggle road check-boxes in the operations sidebar. Active pathfinders will automatically bypass blocked roads.
 5. **Add Resource Portal**: Add new hospitals, shelters, or rescue teams dynamically in real-time. Node.js writes them back to the CSV database, so they are immediately available.
 6. **Performance & Comparisons**: Displays execution time, nodes expanded, total distance, and estimated travel time. Shows a side-by-side comparison table of all 4 algorithms.
+
+---
+
+## Getting Started: How to Run the Project
+
+### 1. Prerequisites
+
+Before running the project, ensure you have the following installed on your machine:
+
+* **[Node.js](https://nodejs.org/)** (v16.x or higher recommended) and **npm**.
+* *(Optional but Recommended)* **C++ Compiler (`g++` / GCC / MinGW)** with C++11 support or higher.
+  > **Note (Dual-Engine Architecture):** If `g++` is not installed on your system, the server will seamlessly run using the **pure JavaScript fallback DSA engine** (`dsaEngine.js`). For maximum speed and performance, compiling the native C++ engine is recommended.
+
+---
+
+### 2. Installation & Quick Start
+
+#### Step 1: Clone the Repository & Navigate to Directory
+```bash
+git clone https://github.com/<your-username>/disaster-response-system-dsa.git
+cd disaster-response-system-dsa
+```
+
+#### Step 2: Install Dependencies
+Install the required Node.js packages:
+```bash
+npm install
+```
+
+#### Step 3: Build the C++ DSA Engine *(Optional)*
+Compile the C++ source files into the native executable:
+```bash
+npm run build
+```
+* On **Windows**, this generates `DisasterSystem.exe`.
+* On **Linux / macOS**, this generates `DisasterSystem`.
+
+#### Step 4: Start the Server
+Launch the Node.js Express server:
+```bash
+npm start
+```
+*(Alternatively, you can run `npm run dev` or `node server.js`)*
+
+#### Step 5: Open the Web Application
+Open your web browser and navigate to:
+```
+http://localhost:3000
+```
+
+---
+
+### 3. Running Standalone CLI Mode (Direct C++ Engine)
+
+You can also run the C++ engine directly from the command line without launching the web server:
+
+* **Display Graph & Roads:**
+  ```bash
+  # Windows
+  .\DisasterSystem.exe --graph
+  # Linux / macOS
+  ./DisasterSystem --graph
+  ```
+
+* **Calculate Rescue Route (Dijkstra / A* / BFS / DFS):**
+  ```bash
+  .\DisasterSystem.exe --route "New Delhi" "Mumbai" --algo dijkstra
+  .\DisasterSystem.exe --route "Chennai" "Kolkata" --algo astar
+  ```
+
+* **Simulate Blocked Roads:**
+  ```bash
+  .\DisasterSystem.exe --route "New Delhi" "Mumbai" --algo dijkstra --block "New Delhi-Mumbai"
+  ```
+
+* **Graph Traversals (BFS / DFS):**
+  ```bash
+  .\DisasterSystem.exe --traversal bfs "Bengaluru"
+  .\DisasterSystem.exe --traversal dfs "Bengaluru"
+  ```
+
+* **Query Emergency Resources for a Sector:**
+  ```bash
+  .\DisasterSystem.exe --resources "Chennai"
+  ```
+
+---
+
+### 4. Project Structure
+
+```text
+disaster-response-system-dsa/
+├── backend/
+│   └── src/
+│       ├── algorithms.cpp / .h  # Dijkstra, A*, BFS, DFS implementations
+│       ├── data.cpp / .h        # CSV data parser and models
+│       ├── graph.cpp / .h       # Adjacency list graph representation
+│       └── main.cpp             # CLI entry point and JSON output formatter
+├── data/
+│   ├── coordinates.csv          # Lat/Long for 36 Indian cities
+│   ├── disasterData.json        # Disaster statistics & analytics
+│   ├── hospitals.csv            # Hospital facilities & bed counts
+│   ├── roads.csv                # Graph edges with distances & danger ratings
+│   ├── shelters.csv             # Relief shelters & capacities
+│   └── teams.csv                # Disaster response units & specialties
+├── frontend/
+│   ├── index.html               # Main dashboard UI
+│   ├── css/                     # Styling and layout
+│   └── js/                      # Leaflet map, API integration, and interactions
+├── build.js                     # Cross-platform C++ compilation script
+├── dsaEngine.js                 # Fallback DSA engine written in Node.js
+├── server.js                    # Express API server & static host
+└── package.json                 # Project configuration & npm scripts
+```
